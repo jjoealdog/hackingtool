@@ -9,7 +9,8 @@ WORKDIR /root/hackingtool
 COPY requirements.txt ./
 
 # Bug 21 fix: boxes/lolcat/flask are NOT pip packages — removed
-RUN pip3 install --no-cache-dir -r requirements.txt
+# --break-system-packages needed on Kali (PEP 668 externally-managed env)
+RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 
 COPY . .
 
