@@ -62,6 +62,7 @@ def _show_inline_help():
             ("  ─────────────────────────────────\n", "dim"),
             ("  1–N    ", "bold cyan"), ("select item\n", "white"),
             ("  97     ", "bold cyan"), ("install all (in category)\n", "white"),
+            ("\n  Tool menu: Install, Run, Update, Open Folder\n", "dim"),
             ("  99     ", "bold cyan"), ("go back\n", "white"),
             ("  98     ", "bold cyan"), ("open project page / archived\n", "white"),
             ("  ?      ", "bold cyan"), ("show this help\n", "white"),
@@ -110,6 +111,7 @@ class HackingTool:
         if runnable:
             self.OPTIONS.append(("Run", self.run))
         self.OPTIONS.append(("Update", self.update))
+        self.OPTIONS.append(("Open Folder", self.open_folder))
         self.OPTIONS.extend(options)
 
     @property
@@ -268,6 +270,55 @@ class HackingTool:
             console.print("[success]✔ Update complete![/success]")
         else:
             console.print("[dim]No automatic update method available for this tool.[/dim]")
+
+    def _get_tool_dir(self) -> str | None:
+        """Find the tool's local directory — clone target, pip location, or binary path."""
+        # 1. Check git clone target dir
+        for ic in (self.INSTALL_COMMANDS or []):
+            if "git clone" in ic:
+                parts = ic.split()
+                # If last arg is not a URL, it's a custom dir name
+                repo_urls = [p for p in parts if p.startswith("http")]
+                if repo_urls:
+                    dirname = repo_urls[0].rstrip("/").rsplit("/", 1)[-1].replace(".git", "")
+                    # Check custom target dir (arg after URL)
+                    url_idx = parts.index(repo_urls[0])
+                    if url_idx + 1 < len(parts):
+                        dirname = parts[url_idx + 1]
+                    if os.path.isdir(dirname):
+                        return os.path.abspath(dirname)
+
+        # 2. Check binary location via which
+        if self.RUN_COMMANDS:
+            cmd = self.RUN_COMMANDS[0]
+            if "&&" in cmd:
+                # "cd foo && bar" → check "foo"
+                cd_part = cmd.split("&&")[0].strip()
+                if cd_part.startswith("cd "):
+                    d = cd_part[3:].strip()
+                    if os.path.isdir(d):
+                        return os.path.abspath(d)
+            binary = cmd.split()[0] if cmd else ""
+            if binary.startswith("sudo"):
+                binary = cmd.split()[1] if len(cmd.split()) > 1 else ""
+            path = shutil.which(binary) if binary else None
+            if path:
+                return os.path.dirname(os.path.realpath(path))
+
+        return None
+
+    def open_folder(self):
+        """Open the tool's directory in a new shell so the user can work manually."""
+        tool_dir = self._get_tool_dir()
+        if tool_dir:
+            console.print(f"[success]Opening folder: {tool_dir}[/success]")
+            console.print("[dim]Type 'exit' to return to hackingtool.[/dim]")
+            os.system(f'cd "{tool_dir}" && $SHELL')
+        else:
+            console.print("[warning]Tool directory not found.[/warning]")
+            if self.PROJECT_URL:
+                console.print(f"[dim]You can clone it manually:[/dim]")
+                console.print(f"[cyan]  git clone {self.PROJECT_URL}.git[/cyan]")
 
     def before_run(self): pass
 
