@@ -1,17 +1,6 @@
-# coding=utf-8
 import os
 
-from core import HackingTool
-from core import HackingToolsCollection
-
-from rich.console import Console
-from rich.theme import Theme
-from rich.table import Table
-from rich.panel import Panel
-from rich.prompt import Prompt
-
-_theme = Theme({"purple": "#7B61FF"})
-console = Console(theme=_theme)
+from core import HackingTool, HackingToolsCollection, console
 
 
 class autophisher(HackingTool):
@@ -19,22 +8,22 @@ class autophisher(HackingTool):
     DESCRIPTION = "Automated Phishing Toolkit"
     INSTALL_COMMANDS = [
         "sudo git clone https://github.com/CodingRanjith/autophisher.git",
-        "cd autophisher"
     ]
-    RUN_COMMANDS = ["cd autophisher;sudo bash autophisher.sh"]
+    RUN_COMMANDS = ["cd autophisher && sudo bash autophisher.sh"]
     PROJECT_URL = "https://github.com/CodingRanjith/autophisher"
 
 
 class Pyphisher(HackingTool):
     TITLE = "Pyphisher"
     DESCRIPTION = "Easy to use phishing tool with 77 website templates"
+    # Bug 9 fix: pip must reference the full path, not rely on a no-op "cd" call
     INSTALL_COMMANDS = [
-        "sudo git clone https://github.com/KasRoudra/PyPhisher",
-        "cd PyPhisher/files",
-        "pip3 install -r requirements.txt"
+        "git clone https://github.com/KasRoudra/PyPhisher",
+        "pip3 install --user -r PyPhisher/files/requirements.txt",
     ]
-    RUN_COMMANDS = ["cd PyPhisher;sudo python3 pyphisher.py"]
-    PROJECT_URL = "git clone https://github.com/KasRoudra/PyPhisher"
+    RUN_COMMANDS = ["cd PyPhisher && sudo python3 pyphisher.py"]
+    # Bug 8 fix: PROJECT_URL was a git clone command, not a URL
+    PROJECT_URL = "https://github.com/KasRoudra/PyPhisher"
 
 
 class AdvPhishing(HackingTool):
@@ -42,18 +31,22 @@ class AdvPhishing(HackingTool):
     DESCRIPTION = "This is Advance Phishing Tool ! OTP PHISHING"
     INSTALL_COMMANDS = [
         "sudo git clone https://github.com/Ignitetch/AdvPhishing.git",
-        "cd AdvPhishing;chmod 777 *;bash Linux-Setup.sh"]
+        # Vuln 2 fix: chmod 777 → chmod +x
+        "cd AdvPhishing && chmod +x Linux-Setup.sh && bash Linux-Setup.sh",
+    ]
     RUN_COMMANDS = ["cd AdvPhishing && sudo bash AdvPhishing.sh"]
     PROJECT_URL = "https://github.com/Ignitetch/AdvPhishing"
 
 
 class Setoolkit(HackingTool):
     TITLE = "Setoolkit"
-    DESCRIPTION = "The Social-Engineer Toolkit is an open-source penetration\n" \
-                  "testing framework designed for social engine"
+    DESCRIPTION = (
+        "The Social-Engineer Toolkit is an open-source penetration\n"
+        "testing framework designed for social engineering."
+    )
     INSTALL_COMMANDS = [
         "git clone https://github.com/trustedsec/social-engineer-toolkit/",
-        "cd social-engineer-toolkit && sudo python3 setup.py"
+        "cd social-engineer-toolkit && pip install --user .",
     ]
     RUN_COMMANDS = ["sudo setoolkit"]
     PROJECT_URL = "https://github.com/trustedsec/social-engineer-toolkit"
@@ -64,7 +57,7 @@ class SocialFish(HackingTool):
     DESCRIPTION = "Automated Phishing Tool & Information Collector NOTE: username is 'root' and password is 'pass'"
     INSTALL_COMMANDS = [
         "sudo git clone https://github.com/UndeadSec/SocialFish.git && sudo apt-get install python3 python3-pip python3-dev -y",
-        "cd SocialFish && sudo python3 -m pip install -r requirements.txt"
+        "cd SocialFish && sudo python3 -m pip install -r requirements.txt",
     ]
     RUN_COMMANDS = ["cd SocialFish && sudo python3 SocialFish.py root pass"]
     PROJECT_URL = "https://github.com/UndeadSec/SocialFish"
@@ -72,45 +65,45 @@ class SocialFish(HackingTool):
 
 class HiddenEye(HackingTool):
     TITLE = "HiddenEye"
-    DESCRIPTION = "Modern Phishing Tool With Advanced Functionality And " \
-                  "Multiple Tunnelling Services \n" \
-                  "\t [!]https://github.com/DarkSecDevelopers/HiddenEye"
+    DESCRIPTION = (
+        "Modern Phishing Tool With Advanced Functionality And Multiple Tunnelling Services\n"
+        "\t[!] https://github.com/DarkSecDevelopers/HiddenEye"
+    )
     INSTALL_COMMANDS = [
-        "sudo git clone https://github.com/Morsmalleo/HiddenEye.git ;sudo chmod 777 HiddenEye",
-        "cd HiddenEye;sudo pip3 install -r requirements.txt;sudo pip3 install requests;pip3 install pyngrok"
+        # Vuln 2 fix: chmod 777 → chmod 755
+        "sudo git clone https://github.com/Morsmalleo/HiddenEye.git && chmod -R 755 HiddenEye",
+        "cd HiddenEye && sudo pip3 install -r requirements.txt && pip3 install pyngrok",
     ]
-    RUN_COMMANDS = ["cd HiddenEye;sudo python3 HiddenEye.py"]
-    PROJECT_URL = "https://github.com/Morsmalleo/HiddenEye.git"
+    RUN_COMMANDS = ["cd HiddenEye && sudo python3 HiddenEye.py"]
+    PROJECT_URL = "https://github.com/Morsmalleo/HiddenEye"
 
 
 class Evilginx2(HackingTool):
-    TITLE = "Evilginx2"
-    DESCRIPTION = "evilginx2 is a man-in-the-middle attack framework used " \
-                  "for phishing login credentials along with session cookies,\n" \
-                  "which in turn allows to bypass 2-factor authentication protection.\n\n\t " \
-                  "[+]Make sure you have installed GO of version at least 1.14.0 \n" \
-                  "[+]After installation, add this to your ~/.profile, assuming that you installed GO in /usr/local/go\n\t " \
-                  "[+]export GOPATH=$HOME/go \n " \
-                  "[+]export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin \n" \
-                  "[+]Then load it with source ~/.profiles."
+    TITLE = "Evilginx3"
+    DESCRIPTION = (
+        "evilginx is a man-in-the-middle attack framework used for phishing login credentials\n"
+        "along with session cookies, bypassing 2-factor authentication.\n"
+        "Requires Go >= 1.18 installed."
+    )
+    # Bug 6 fix: removed 'sudo evilginx' (interactive) from INSTALL_COMMANDS
     INSTALL_COMMANDS = [
-        "sudo apt-get install git make;go get -u github.com/kgretzky/evilginx2",
-        "cd $GOPATH/src/github.com/kgretzky/evilginx2;make",
-        "sudo make install;sudo evilginx"
+        "sudo apt-get install -y git make golang-go",
+        "go install github.com/kgretzky/evilginx/v3@latest",
     ]
-    RUN_COMMANDS = ["sudo evilginx"]
+    RUN_COMMANDS = ["evilginx"]
     PROJECT_URL = "https://github.com/kgretzky/evilginx2"
+    REQUIRES_GO = True
 
 
 class ISeeYou(HackingTool):
     TITLE = "I-See_You"
-    DESCRIPTION = "[!] ISeeYou is a tool to find Exact Location of Victom By" \
-                  " User SocialEngineering or Phishing Engagement..\n" \
-                  "[!] Users can expose their local servers to the Internet " \
-                  "and decode the location coordinates by looking at the log file"
+    DESCRIPTION = (
+        "[!] ISeeYou finds the exact location of a target via social engineering.\n"
+        "[!] Expose local servers to the internet and decode location from log file."
+    )
     INSTALL_COMMANDS = [
         "sudo git clone https://github.com/Viralmaniar/I-See-You.git",
-        "cd I-See-You && sudo chmod u+x ISeeYou.sh"
+        "cd I-See-You && sudo chmod u+x ISeeYou.sh",
     ]
     RUN_COMMANDS = ["cd I-See-You && sudo bash ISeeYou.sh"]
     PROJECT_URL = "https://github.com/Viralmaniar/I-See-You"
@@ -118,7 +111,7 @@ class ISeeYou(HackingTool):
 
 class SayCheese(HackingTool):
     TITLE = "SayCheese"
-    DESCRIPTION = "Take webcam shots from target just sending a malicious link"
+    DESCRIPTION = "Take webcam shots from target just by sending a malicious link"
     INSTALL_COMMANDS = ["sudo git clone https://github.com/hangetzzu/saycheese"]
     RUN_COMMANDS = ["cd saycheese && sudo bash saycheese.sh"]
     PROJECT_URL = "https://github.com/hangetzzu/saycheese"
@@ -128,19 +121,13 @@ class QRJacking(HackingTool):
     TITLE = "QR Code Jacking"
     DESCRIPTION = "QR Code Jacking (Any Website)"
     INSTALL_COMMANDS = [
-        "sudo git clone https://github.com/cryptedwolf/ohmyqr.git && sudo apt -y install scrot"]
+        "sudo git clone https://github.com/cryptedwolf/ohmyqr.git && sudo apt -y install scrot",
+    ]
     RUN_COMMANDS = ["cd ohmyqr && sudo bash ohmyqr.sh"]
     PROJECT_URL = "https://github.com/cryptedwolf/ohmyqr"
 
 
-class WifiPhisher(HackingTool):
-    TITLE = "WifiPhisher"
-    DESCRIPTION = "The Rogue Access Point Framework"
-    INSTALL_COMMANDS = [
-        "sudo git clone https://github.com/wifiphisher/wifiphisher.git",
-        "cd wifiphisher"]
-    RUN_COMMANDS = ["cd wifiphisher && sudo python setup.py"]
-    PROJECT_URL = "https://github.com/wifiphisher/wifiphisher"
+# Bug 10 fix: WifiPhisher removed from phishing tools — it belongs in wireless_attack_tools.py
 
 
 class BlackEye(HackingTool):
@@ -148,7 +135,7 @@ class BlackEye(HackingTool):
     DESCRIPTION = "The ultimate phishing tool with 38 websites available!"
     INSTALL_COMMANDS = [
         "sudo git clone https://github.com/thelinuxchoice/blackeye",
-        "cd blackeye "]
+    ]
     RUN_COMMANDS = ["cd blackeye && sudo bash blackeye.sh"]
     PROJECT_URL = "https://github.com/An0nUD4Y/blackeye"
 
@@ -157,45 +144,44 @@ class ShellPhish(HackingTool):
     TITLE = "ShellPhish"
     DESCRIPTION = "Phishing Tool for 18 social media"
     INSTALL_COMMANDS = ["git clone https://github.com/An0nUD4Y/shellphish.git"]
-    RUN_COMMANDS = ["cd shellphish;sudo bash shellphish.sh"]
+    RUN_COMMANDS = ["cd shellphish && sudo bash shellphish.sh"]
     PROJECT_URL = "https://github.com/An0nUD4Y/shellphish"
 
 
 class Thanos(HackingTool):
     TITLE = "Thanos"
-    DESCRIPTION = "Browser to Browser Phishingtoolkit"
+    DESCRIPTION = "Browser to Browser Phishing toolkit"
     INSTALL_COMMANDS = [
         "sudo git clone https://github.com/TridevReddy/Thanos.git",
-        "cd Thanos && sudo chmod -R 777 Thanos.sh"
+        # Vuln 2 fix: chmod -R 777 → chmod +x
+        "cd Thanos && chmod +x Thanos.sh",
     ]
-    RUN_COMMANDS = ["cd Thanos;sudo bash Thanos.sh"]
+    RUN_COMMANDS = ["cd Thanos && sudo bash Thanos.sh"]
     PROJECT_URL = "https://github.com/TridevReddy/Thanos"
 
 
 class QRLJacking(HackingTool):
     TITLE = "QRLJacking"
-    DESCRIPTION = "QRLJacking"
+    DESCRIPTION = "QRLJacking — session hijacking attack vector targeting QR code based login"
     INSTALL_COMMANDS = [
         "git clone https://github.com/OWASP/QRLJacking.git",
-        "cd QRLJacking",
-        "git clone https://github.com/mozilla/geckodriver.git",
-        "chmod +x geckodriver",
-        "sudo mv -f geckodriver /usr/local/share/geckodriver",
-        "sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver",
-        "sudo ln -s /usr/local/share/geckodriver /usr/bin/geckodriver",
-        "cd QRLJacker;pip3 install -r requirements.txt"
+        # Bug fix: geckodriver must be fetched as a binary, not cloned from source
+        "GECKO_VER=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep tag_name | cut -d '\"' -f4) && "
+        "wget -q https://github.com/mozilla/geckodriver/releases/download/$GECKO_VER/geckodriver-$GECKO_VER-linux64.tar.gz -O /tmp/geckodriver.tar.gz && "
+        "tar -xzf /tmp/geckodriver.tar.gz -C /tmp && sudo mv /tmp/geckodriver /usr/local/bin/",
+        "cd QRLJacking && pip3 install --user -r QRLJacker/requirements.txt",
     ]
-    RUN_COMMANDS = ["cd QRLJacking/QRLJacker;python3 QrlJacker.py"]
+    RUN_COMMANDS = ["cd QRLJacking/QRLJacker && python3 QrlJacker.py"]
     PROJECT_URL = "https://github.com/OWASP/QRLJacking"
 
 
 class Maskphish(HackingTool):
-    TITLE = "Miskphish"
+    TITLE = "Maskphish"
     DESCRIPTION = "Hide phishing URL under a normal looking URL (google.com or facebook.com)"
     INSTALL_COMMANDS = [
         "sudo git clone https://github.com/jaykali/maskphish.git",
-        "cd maskphish"]
-    RUN_COMMANDS = ["cd maskphish;sudo bash maskphish.sh"]
+    ]
+    RUN_COMMANDS = ["cd maskphish && sudo bash maskphish.sh"]
     PROJECT_URL = "https://github.com/jaykali/maskphish"
 
 
@@ -203,23 +189,27 @@ class BlackPhish(HackingTool):
     TITLE = "BlackPhish"
     INSTALL_COMMANDS = [
         "sudo git clone https://github.com/iinc0gnit0/BlackPhish.git",
-        "cd BlackPhish;sudo bash install.sh"
+        "cd BlackPhish && sudo bash install.sh",
     ]
-    RUN_COMMANDS = ["cd BlackPhish;sudo python3 blackphish.py"]
+    RUN_COMMANDS = ["cd BlackPhish && sudo python3 blackphish.py"]
     PROJECT_URL = "https://github.com/iinc0gnit0/BlackPhish"
 
     def __init__(self):
-        super(BlackPhish, self).__init__([('Update', self.update)])
+        # Bug fix: super() Python 3 style
+        super().__init__([("Update", self.update)])
 
     def update(self):
-        os.system("cd BlackPhish;sudo bash update.sh")
+        os.system("cd BlackPhish && sudo bash update.sh")
 
 
-class dnstwist(HackingTool):
-    Title = 'dnstwist'
-    Install_commands = ['sudo git clone https://github.com/elceef/dnstwist.git','cd dnstwist']
-    Run_commands = ['cd dnstwist;sudo python3 dnstwist.py']
-    project_url = 'https://github.com/elceef/dnstwist'
+class Dnstwist(HackingTool):
+    # Bug 2 fix: all attributes were wrong case (Title, Install_commands, etc.)
+    # They are now the correct uppercase names the base class reads.
+    TITLE = "dnstwist"
+    DESCRIPTION = "Domain name permutation engine for detecting typosquatting, phishing and brand impersonation"
+    INSTALL_COMMANDS = ["pip3 install --user dnstwist"]
+    RUN_COMMANDS = ["dnstwist --help"]
+    PROJECT_URL = "https://github.com/elceef/dnstwist"
 
 
 class PhishingAttackTools(HackingToolsCollection):
@@ -241,79 +231,10 @@ class PhishingAttackTools(HackingToolsCollection):
         QRLJacking(),
         BlackPhish(),
         Maskphish(),
-        dnstwist()
+        Dnstwist(),
     ]
-
-    def _get_attr_fallback(self, item, *names, default=""):
-        for n in names:
-            if hasattr(item, n):
-                return getattr(item, n)
-        return default
-
-    def pretty_print(self):
-        table = Table(title="Phishing Attack Tools", show_lines=True, expand=True)
-        table.add_column("Title", style="purple", no_wrap=True)
-        table.add_column("Description", style="purple")
-        table.add_column("Project URL", style="purple", no_wrap=True)
-
-        for t in self.TOOLS:
-            # try typical attribute names, then fall back to common variations
-            title = (
-                self._get_attr_fallback(t, "TITLE", "Title", "title")
-                or t.__class__.__name__
-            )
-            desc = self._get_attr_fallback(t, "DESCRIPTION", "Description", "description", "INSTALL_COMMANDS", default="") or ""
-            # prefer PROJECT_URL but also accept project_url or project_url-like fields
-            url = self._get_attr_fallback(t, "PROJECT_URL", "PROJECT_URL", "PROJECT", "project_url", "projectUrl", default="") or ""
-            table.add_row(str(title), str(desc).strip().replace("\n", " "), str(url))
-
-        panel = Panel(table, title="[purple]Available Tools[/purple]", border_style="purple")
-        console.print(panel)
-
-    def show_options(self, parent=None):
-        console.print("\n")
-        panel = Panel.fit("[bold magenta]Phishing Attack Tools Collection[/bold magenta]\n"
-                          "Select a tool to view options or run it.",
-                          border_style="purple")
-        console.print(panel)
-
-        table = Table(title="[bold cyan]Available Tools[/bold cyan]", show_lines=True, expand=True)
-        table.add_column("Index", justify="center", style="bold yellow")
-        table.add_column("Tool Name", justify="left", style="bold green")
-        table.add_column("Description", justify="left", style="white")
-
-        for i, tool in enumerate(self.TOOLS):
-            title = self._get_attr_fallback(tool, "TITLE", "Title", "title", default=tool.__class__.__name__)
-            desc = self._get_attr_fallback(tool, "DESCRIPTION", "Description", "description", default="—")
-            table.add_row(str(i + 1), title, desc or "—")
-
-        table.add_row("[red]99[/red]", "[bold red]Exit[/bold red]", "Return to previous menu")
-        console.print(table)
-
-        try:
-            choice = Prompt.ask("[bold cyan]Select a tool to run[/bold cyan]", default="99")
-            choice = int(choice)
-            if 1 <= choice <= len(self.TOOLS):
-                selected = self.TOOLS[choice - 1]
-                # If tool exposes show_options (collection-style), delegate to it
-                if hasattr(selected, "show_options"):
-                    selected.show_options(parent=self)
-                # Otherwise, if runnable, call its run method
-                elif hasattr(selected, "run"):
-                    selected.run()
-                # Preserve any before_run hooks if present
-                elif hasattr(selected, "before_run"):
-                    selected.before_run()
-                else:
-                    console.print("[bold yellow]Selected tool has no runnable interface.[/bold yellow]")
-            elif choice == 99:
-                return 99
-        except Exception:
-            console.print("[bold red]Invalid choice. Try again.[/bold red]")
-        return self.show_options(parent=parent)
 
 
 if __name__ == "__main__":
     tools = PhishingAttackTools()
-    tools.pretty_print()
     tools.show_options()

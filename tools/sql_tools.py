@@ -25,9 +25,13 @@ class Sqlmap(HackingTool):
 class NoSqlMap(HackingTool):
     TITLE = "NoSqlMap"
     DESCRIPTION = "NoSQLMap is an open source Python tool designed to audit and automate injection attacks. [*] Please install MongoDB."
-    INSTALL_COMMANDS = ["git clone https://github.com/codingo/NoSQLMap.git",
-                        "sudo chmod -R 755 NoSQLMap;cd NoSQLMap;python setup.py install"]
-    RUN_COMMANDS = ["python NoSQLMap"]
+    INSTALL_COMMANDS = [
+        "git clone https://github.com/codingo/NoSQLMap.git",
+        # Bug 25 fix: was "python setup.py install" (Python 2) and "python NoSQLMap"
+        "cd NoSQLMap && pip install --user .",
+    ]
+    # Bug 25 fix: "python" → "python3"
+    RUN_COMMANDS = ["python3 -m nosqlmap"]
     PROJECT_URL = "https://github.com/codingo/NoSQLMap"
 
 

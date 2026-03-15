@@ -20,19 +20,15 @@ console = Console(theme=_theme)
 class InstaBrute(HackingTool):
     TITLE = "Instagram Attack"
     DESCRIPTION = "Brute force attack against Instagram"
-    INSTALL_COMMANDS = [
-        "sudo git clone https://github.com/chinoogawa/instaBrute.git",
-        "cd instaBrute;sudo pip2.7 install -r requirements.txt"
-    ]
     PROJECT_URL = "https://github.com/chinoogawa/instaBrute"
+    # Py3-7: Python 2 only (pip2.7); also violates Instagram ToS
+    ARCHIVED = True
+    ARCHIVED_REASON = "Python 2 only — EOL January 2020. Repo unmaintained since 2017."
+    INSTALL_COMMANDS = []
+    RUN_COMMANDS = []
 
-    def run(self):
-        name = input("Enter Username >> ")
-        wordlist = input("Enter wordword list >> ")
-        os.chdir("instaBrute")
-        subprocess.run(
-            ["sudo", "python", "instaBrute.py", "-u", f"{name}", "-d",
-             f"{wordlist}"])
+    def __init__(self):
+        super().__init__(installable=False, runnable=False)
 
 
 class BruteForce(HackingTool):
@@ -57,12 +53,14 @@ class Faceshell(HackingTool):
     PROJECT_URL = "https://github.com/Matrix07ksa/Brute_Force"
 
     def run(self):
-        name = input("Enter Username >> ")
-        wordlist = input("Enter Wordlist >> ")
-        with contextlib.suppress(FileNotFoundError):
-            os.chdir("Brute_Force")
+        from config import get_tools_dir
+        name = Prompt.ask("Enter Username")
+        wordlist = Prompt.ask("Enter Wordlist path")
+        # Bug 3 fix: os.chdir() replaced with cwd= parameter
         subprocess.run(
-            ["python3", "Brute_Force.py", "-f", f"{name}", "-l", f"{wordlist}"])
+            ["python3", "Brute_Force.py", "-f", name, "-l", wordlist],
+            cwd=str(get_tools_dir() / "Brute_Force"),
+        )
 
 
 class AppCheck(HackingTool):

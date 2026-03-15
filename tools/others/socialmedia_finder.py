@@ -69,9 +69,14 @@ class Sherlock(HackingTool):
     PROJECT_URL = "https://github.com/sherlock-project/sherlock"
 
     def run(self):
-        name = input("Enter Username >> ")
-        os.chdir('sherlock')
-        subprocess.run(["sudo", "python3", "sherlock", f"{name}"])
+        from config import get_tools_dir
+        from rich.prompt import Prompt
+        name = Prompt.ask("Enter Username")
+        # Bug 3 fix: os.chdir() replaced with cwd= parameter
+        subprocess.run(
+            ["python3", "sherlock", name],
+            cwd=str(get_tools_dir() / "sherlock"),
+        )
 
 
 class SocialScan(HackingTool):

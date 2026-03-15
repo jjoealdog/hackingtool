@@ -12,17 +12,8 @@ _theme = Theme({"purple": "#7B61FF"})
 console = Console(theme=_theme)
 
 
-class Stitch(HackingTool):
-    TITLE = "Stitch"
-    DESCRIPTION = "Stitch is a cross platform python framework.\n" \
-                  "which allows you to build custom payloads\n" \
-                  "For Windows, Mac and Linux."
-    INSTALL_COMMANDS = [
-        "sudo git clone https://github.com/nathanlopez/Stitch.git",
-        "cd Stitch;sudo pip install -r lnx_requirements.txt"
-    ]
-    RUN_COMMANDS = ["cd Stitch;python main.py"]
-    PROJECT_URL = "https://github.com/nathanlopez/Stitch"
+# Bug 17 fix: Stitch was defined in both payload_creator.py and remote_administration.py.
+# It is kept in payload_creator.py (its correct category) and removed from here.
 
 
 class Pyshell(HackingTool):

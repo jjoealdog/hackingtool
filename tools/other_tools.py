@@ -33,9 +33,14 @@ class HatCloud(HackingTool):
     PROJECT_URL = "https://github.com/HatBashBR/HatCloud"
 
     def run(self):
-        site = input("Enter Site >> ")
-        os.chdir("HatCloud")
-        subprocess.run(["sudo", "ruby", "hatcloud.rb", "-b", site])
+        from config import get_tools_dir
+        from rich.prompt import Prompt
+        site = Prompt.ask("Enter Site")
+        # Bug 3 fix: os.chdir() replaced with cwd= parameter
+        subprocess.run(
+            ["sudo", "ruby", "hatcloud.rb", "-b", site],
+            cwd=str(get_tools_dir() / "HatCloud"),
+        )
 
 
 class OtherTools(HackingToolsCollection):

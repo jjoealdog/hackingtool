@@ -18,8 +18,8 @@ console = Console(theme=_theme)
 
 class Cupp(HackingTool):
     TITLE = "Cupp"
-    DESCRIPTION = "WlCreator is a C program that can create all possibilities of passwords,\n " \
-                  "and you can choose Length, Lowercase, Capital, Numbers and Special Chars"
+    # Bug 24 fix: DESCRIPTION was copy-pasted from WlCreator — completely wrong
+    DESCRIPTION = "Common User Passwords Profiler — generates personalized wordlists based on target info."
     INSTALL_COMMANDS = ["git clone https://github.com/Mebus/cupp.git"]
     RUN_COMMANDS = ["cd cupp && python3 cupp.py -i"]
     PROJECT_URL = "https://github.com/Mebus/cupp"

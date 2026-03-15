@@ -149,10 +149,13 @@ class Striker(HackingTool):
     PROJECT_URL = "https://github.com/s0md3v/Striker"
 
     def run(self):
-        console.print(Panel(Text(self.TITLE, justify="center"), style=PURPLE_STYLE))
-        site = Prompt.ask("Enter Site Name (example.com) >> ")
-        os.chdir("Striker")
-        subprocess.run(["sudo", "python3", "striker.py", site])
+        from config import get_tools_dir
+        site = Prompt.ask("Enter Site Name (example.com)")
+        # Bug 3 fix: os.chdir() corrupts the process CWD permanently — use cwd= instead
+        subprocess.run(
+            ["sudo", "python3", "striker.py", site],
+            cwd=str(get_tools_dir() / "Striker"),
+        )
 
 
 class SecretFinder(HackingTool):
@@ -193,10 +196,13 @@ class PortScannerRanger(HackingTool):
     PROJECT_URL = "https://github.com/floriankunushevci/rang3r"
 
     def run(self):
-        console.print(Panel(Text(self.TITLE, justify="center"), style=PURPLE_STYLE))
-        ip = Prompt.ask("Enter Ip >> ")
-        os.chdir("rang3r")
-        subprocess.run(["sudo", "python", "rang3r.py", "--ip", ip])
+        from config import get_tools_dir
+        ip = Prompt.ask("Enter IP")
+        # Bug 3 fix: os.chdir() replaced with cwd= parameter
+        subprocess.run(
+            ["sudo", "python3", "rang3r.py", "--ip", ip],
+            cwd=str(get_tools_dir() / "rang3r"),
+        )
 
 
 class Breacher(HackingTool):
@@ -206,10 +212,13 @@ class Breacher(HackingTool):
     PROJECT_URL = "https://github.com/s0md3v/Breacher"
 
     def run(self):
-        console.print(Panel(Text(self.TITLE, justify="center"), style=PURPLE_STYLE))
-        domain = Prompt.ask("Enter domain (example.com) >> ")
-        os.chdir("Breacher")
-        subprocess.run(["python3", "breacher.py", "-u", domain])
+        from config import get_tools_dir
+        domain = Prompt.ask("Enter domain (example.com)")
+        # Bug 3 fix: os.chdir() replaced with cwd= parameter
+        subprocess.run(
+            ["python3", "breacher.py", "-u", domain],
+            cwd=str(get_tools_dir() / "Breacher"),
+        )
 
 
 class InformationGatheringTools(HackingToolsCollection):

@@ -1,11 +1,16 @@
 version: "3.9"
 services:
   hackingtool:
-    image: vgpastor/hackingtool
+    # Bug 23 fix: was using external unverified image vgpastor/hackingtool
+    # Now builds from local Dockerfile — no third-party trust required
+    build: .
     container_name: hackingtool
     stdin_open: true
     tty: true
     volumes:
       - .:/root/hackingtool
-    ports:
-      - 22:22
+      - hackingtool_data:/root/.hackingtool
+    # Bug 22 fix: removed port 22:22 — this is a CLI tool, SSH exposure is unnecessary
+
+volumes:
+  hackingtool_data:
