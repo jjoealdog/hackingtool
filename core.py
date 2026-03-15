@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 import webbrowser
 from collections.abc import Callable
@@ -105,6 +106,32 @@ class HackingTool:
         if runnable:
             self.OPTIONS.append(("Run", self.run))
         self.OPTIONS.extend(options)
+
+    @property
+    def is_installed(self) -> bool:
+        """Check if the tool's binary is on PATH or its clone dir exists."""
+        if self.RUN_COMMANDS:
+            cmd = self.RUN_COMMANDS[0]
+            # Handle "cd foo && binary --help" pattern
+            if "&&" in cmd:
+                cmd = cmd.split("&&")[-1].strip()
+            if cmd.startswith("sudo "):
+                cmd = cmd[5:].strip()
+            binary = cmd.split()[0] if cmd else ""
+            if binary and binary not in (".", "echo", "cd"):
+                if shutil.which(binary):
+                    return True
+        # Check if git clone target dir exists
+        if self.INSTALL_COMMANDS:
+            for ic in self.INSTALL_COMMANDS:
+                if "git clone" in ic:
+                    parts = ic.split()
+                    repo_url = [p for p in parts if p.startswith("http")]
+                    if repo_url:
+                        dirname = repo_url[0].rstrip("/").rsplit("/", 1)[-1].replace(".git", "")
+                        if os.path.isdir(dirname):
+                            return True
+        return False
 
     def show_info(self):
         desc = f"[cyan]{self.DESCRIPTION}[/cyan]"
@@ -293,21 +320,22 @@ class HackingToolsCollection:
 
             table = Table(title="Available Tools", box=box.SIMPLE_HEAD, show_lines=True)
             table.add_column("No.", justify="center", style="bold cyan", width=6)
+            table.add_column("", width=2)  # installed indicator
             table.add_column("Tool", style="bold yellow", min_width=24)
             table.add_column("Description", style="white", overflow="fold")
 
             for index, tool in enumerate(active, start=1):
                 desc = getattr(tool, "DESCRIPTION", "") or "—"
-                # Show only first line of description to keep rows compact
                 desc = desc.splitlines()[0] if desc != "—" else "—"
-                table.add_row(str(index), tool.TITLE, desc)
+                status = "[green]✔[/green]" if tool.is_installed else "[dim]✘[/dim]"
+                table.add_row(str(index), status, tool.TITLE, desc)
 
             if archived:
-                table.add_row("[dim]98[/dim]", f"[archived]Archived tools ({len(archived)})[/archived]", "")
+                table.add_row("[dim]98[/dim]", "", f"[archived]Archived tools ({len(archived)})[/archived]", "")
             if incompatible:
                 console.print(f"[dim]({len(incompatible)} tools hidden — not supported on current OS)[/dim]")
 
-            table.add_row("99", f"Back to {parent.TITLE if parent else 'Main Menu'}", "")
+            table.add_row("99", "", f"Back to {parent.TITLE if parent else 'Main Menu'}", "")
             console.print(table)
             console.print(
                 "[dim]  Enter number  ·  [bold cyan]?[/bold cyan] help"
