@@ -82,6 +82,8 @@ Keeping this fork mainly for learning purposes. I mostly use categories 2 (Info 
 
 > **Note:** If you're on Ubuntu and `sudo hackingtool` throws a "command not found" after install, try running `sudo python3 hackingtool.py` directly as a workaround. The install script doesn't always add it to PATH cleanly on non-Kali systems.
 
+> **CTF Tip:** For hash cracking (category 21), I've had the best results pairing this with `rockyou.txt` as the wordlist. On Ubuntu you can find it at `/usr/share/wordlists/rockyou.txt` after installing `wordlists` via apt, or just grab it from SecLists.
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](../../issues).
