@@ -76,6 +76,10 @@ sudo python3 hackingtool.py
 | 25 | Web Crawler |
 | 26 | Mix Tools |
 
+## 📝 Personal Notes
+
+Keeping this fork mainly for learning purposes. I mostly use categories 2 (Info Gathering), 9 (Forensics), and 21 (Hash Cracking) for CTF practice. Tested on Ubuntu 22.04 — works fine, just make sure your Python is up to date.
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](../../issues).
