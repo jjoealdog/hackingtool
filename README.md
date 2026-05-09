@@ -84,6 +84,8 @@ Keeping this fork mainly for learning purposes. I mostly use categories 2 (Info 
 
 > **CTF Tip:** For hash cracking (category 21), I've had the best results pairing this with `rockyou.txt` as the wordlist. On Ubuntu you can find it at `/usr/share/wordlists/rockyou.txt` after installing `wordlists` via apt, or just grab it from SecLists.
 
+> **CTF Tip 2:** For steganography (category 16), `steghide` and `stegsolve` aren't always installed by default on Ubuntu. Run `sudo apt install steghide` separately before launching that category or you'll just get errors.
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](../../issues).
@@ -94,12 +96,4 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 4. Push to the branch (`git push origin feat/some-feature`)
 5. Open a Pull Request
 
-Please read our [Pull Request Template](.github/PULL_REQUEST_TEMPLATE.md) before submitting.
-
-## 🐛 Bug Reports
-
-Found a bug? Please open an issue using the [bug report template](.github/ISSUE_TEMPLATE/bug_report.md).
-
-## 📄 License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+Please read our [Pull Request Template](.github/PULL_REQUEST_TEMPLATE.md) before subm
