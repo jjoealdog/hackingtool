@@ -88,12 +88,8 @@ Keeping this fork mainly for learning purposes. I mostly use categories 2 (Info 
 
 > **CTF Tip 3:** For info gathering (category 2), some tools like `sherlock` may fail with a dependency error on newer Python versions. Fix with `pip3 install --upgrade requests` before running.
 
+> **CTF Tip 4:** For web crawling (category 25), if you're hitting rate limiting during CTFs, adding a small delay between requests helps. Some of the tools here don't throttle by default so just be aware of that.
+
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](../../issues).
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feat/some-feature`)
-3. Commit your changes (`git commit -m 'Add some feature'`)
-4. Push to the branch (`git push origin feat/some-feature`)
-5. Open a Pull Request
+Contri
