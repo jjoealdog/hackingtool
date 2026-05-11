@@ -1,43 +1,70 @@
-import json
-import logging
-from pathlib import Path
-from typing import Any
+"""Configuration settings for hackingtool."""
 
-from constants import USER_CONFIG_FILE, USER_TOOLS_DIR, DEFAULT_CONFIG
+import os
 
-logger = logging.getLogger(__name__)
+# Tool metadata
+TOOL_NAME = "HackingTool"
+VERSION = "2.0.0"
+AUTHOR = "Z4nzu (fork)"
+GITHUB_URL = "https://github.com/Z4nzu/hackingtool"
 
+# Display settings
+BANNER_COLOR = "\033[91m"   # Red
+MENU_COLOR = "\033[92m"    # Green
+INFO_COLOR = "\033[93m"    # Yellow
+ERROR_COLOR = "\033[91m"   # Red
+RESET_COLOR = "\033[0m"
 
-def load() -> dict[str, Any]:
-    """Load config from disk, merging with defaults for any missing keys."""
-    if USER_CONFIG_FILE.exists():
-        try:
-            on_disk = json.loads(USER_CONFIG_FILE.read_text())
-            return {**DEFAULT_CONFIG, **on_disk}
-        except (json.JSONDecodeError, OSError) as exc:
-            logger.warning("Config file unreadable (%s), using defaults.", exc)
-    return dict(DEFAULT_CONFIG)
+# Paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TOOLS_DIR = os.path.join(BASE_DIR, "tools")
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+LOG_FILE = os.path.join(LOG_DIR, "hackingtool.log")
 
+# Tool installation defaults
+DEFAULT_INSTALL_DIR = os.path.expanduser("~/tools")
+PACKAGE_MANAGER = "apt-get"  # Default package manager
 
-def save(cfg: dict[str, Any]) -> None:
-    """Write config to disk, creating parent directories if needed."""
-    USER_CONFIG_FILE.parent.mkdir(parents=True, exist_ok=True)
-    USER_CONFIG_FILE.write_text(json.dumps(cfg, indent=2, sort_keys=True))
+# GitHub raw content base URL for fetching tool lists
+RAW_GITHUB_BASE = "https://raw.githubusercontent.com/Z4nzu/hackingtool/main"
 
+# Category identifiers
+CATEGORIES = [
+    "anonymously_hiding_tools",
+    "information_gathering",
+    "wordlist_creator",
+    "wireless_attack",
+    "sql_injection",
+    "phishing_attack",
+    "web_attack",
+    "post_exploitation",
+    "forensic_tools",
+    "payload_creation",
+    "exploit_frameworks",
+    "reverse_engineering",
+    "ddos_attack",
+    "remote_administration",
+    "xss_attack",
+    "steganography",
+    "social_engineering",
+    "network_tools",
+    "android_hacking",
+    "password_attack",
+    "all_in_one",
+]
 
-def get_tools_dir() -> Path:
-    """
-    Return the directory where external tools are stored.
-    Creates it if it does not exist.
-    Always an absolute path — never relies on process CWD.
-    """
-    cfg = load()
-    tools_dir = Path(cfg.get("tools_dir", str(USER_TOOLS_DIR))).expanduser().resolve()
-    tools_dir.mkdir(parents=True, exist_ok=True)
-    return tools_dir
+# Supported OS list for compatibility checks
+SUPPORTED_OS = ["ubuntu", "debian", "kali", "parrot", "arch", "fedora", "centos"]
 
+# Timeout settings (seconds)
+CLONE_TIMEOUT = 120
+INSTALL_TIMEOUT = 300
+NETWORK_TIMEOUT = 30
 
-def get_sudo_cmd() -> str:
-    """Return 'doas' if available, else 'sudo'. Never hardcode 'sudo'."""
-    import shutil
-    return "doas" if shutil.which("doas") else "sudo"
+# Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+LOG_LEVEL = os.environ.get("HACKINGTOOL_LOG_LEVEL", "INFO")
+
+# Feature flags
+ENABLE_UPDATE_CHECK = True
+ENABLE_LOGGING = True
+SHOW_BANNER = True
