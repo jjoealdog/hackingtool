@@ -64,9 +64,14 @@ NETWORK_TIMEOUT = 30
 
 # Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL
 # switching to DEBUG while I'm actively tinkering so I can see what's going on
+# TODO: remember to set this back to INFO (or just use the env var) before sharing
 LOG_LEVEL = os.environ.get("HACKINGTOOL_LOG_LEVEL", "DEBUG")
 
 # Feature flags
 ENABLE_UPDATE_CHECK = True
 ENABLE_LOGGING = True
 SHOW_BANNER = True
+
+# Max number of log files to keep before rotating - default was unbounded which
+# chewed through disk space fast on my small homelab VM
+LOG_BACKUP_COUNT = 5
