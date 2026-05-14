@@ -58,8 +58,8 @@ SUPPORTED_OS = ["ubuntu", "debian", "kali", "parrot", "arch", "fedora", "centos"
 
 # Timeout settings (seconds)
 # bumped clone/install timeouts a bit - my homelab connection is pretty slow
-CLONE_TIMEOUT = 180
-INSTALL_TIMEOUT = 600
+CLONE_TIMEOUT = 300  # increased from 180, VPN makes things even slower sometimes
+INSTALL_TIMEOUT = 900  # increased from 600 for the same reason
 NETWORK_TIMEOUT = 30
 
 # Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL
