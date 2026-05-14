@@ -63,7 +63,8 @@ INSTALL_TIMEOUT = 900  # increased from 600 for the same reason
 NETWORK_TIMEOUT = 30
 
 # Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL
-LOG_LEVEL = os.environ.get("HACKINGTOOL_LOG_LEVEL", "INFO")
+# switching to DEBUG while I'm actively tinkering so I can see what's going on
+LOG_LEVEL = os.environ.get("HACKINGTOOL_LOG_LEVEL", "DEBUG")
 
 # Feature flags
 ENABLE_UPDATE_CHECK = True
