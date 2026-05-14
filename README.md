@@ -88,4 +88,4 @@ Keeping this fork mainly for learning purposes. I mostly use categories 2 (Info 
 
 > **CTF Tip 3:** For info gathering (category 2), some tools like `sherlock` may fail with a dependency error on newer Python versions. Fix with `pip3 install --upgrade requests` before running.
 
-> **CTF Tip 4:** For web crawling (category 25), if you're hitting SSL errors, try setting `PYTHONHTTPSVERIFY=0` before running or pass `--no-check-certificate` where applicable. Not ideal for real use but fine for CTF lab environments.
+> **CTF Tip 4:** For web crawling (category 25), if you hit SSL verification errors, try running with `--no-check-certificate` if the tool supports it, or export `PYTHONHTTPSVERIFY=0` as a last resort in a safe lab environment.
